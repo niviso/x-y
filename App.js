@@ -13,15 +13,28 @@ export default class App extends Component<Props> {
       screen : 'start', //start,game,finish
       playing: false
     }
+    this.sound = new Audio.Sound();
+    this.STARTMUSIC = require('./assets/music/04.mp3');
+    this.GAMEMUSIC = require('./assets/music/04.mp3');
+  }
+
+  startSound = async (file) => {
+    if(!this.state.playing){
+    await Audio.setIsEnabledAsync(true);
+    await this.sound.loadAsync(file);
+    this.sound.setIsLoopingAsync(true);
+    this.playSound();
+  }
   }
 
   playSound = async () => {
-    if(!this.state.playing){
-    await Audio.setIsEnabledAsync(true);
-    const sound = new Audio.Sound();
-    await sound.loadAsync(require('./assets/music/05.mp3'));
-    await sound.playAsync();
+await this.sound.playAsync();
+}
+  pauseSound = async () => {
+    await this.sound.pauseAsync();
   }
+  stopSound = async () => {
+    await this.sound.stopAsync();
   }
   setScreen = (str) => {
     this.setState({
@@ -29,9 +42,12 @@ export default class App extends Component<Props> {
       });
   }
   startGame = () => {
+
     this.setState({
       screen: 'game'
       });
+
+
   }
   stopGame = () => {
     this.setState({
@@ -39,7 +55,7 @@ export default class App extends Component<Props> {
       });
   }
   componentDidMount(){
-      this.playSound();
+      this.startSound(this.STARTMUSIC);
       this.setState({
         playing: true
       });
