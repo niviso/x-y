@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View,Animated,Easing,TouchableWithoutFeedback} from 'react-native';
 import Game from './Game';
 import GameState from './GameState';
+import { Audio } from 'expo-av';
 
 export default class Start extends Component{
 
@@ -14,6 +15,7 @@ export default class Start extends Component{
       xValue: new Animated.Value(0.9),
     }
   }
+
   animate = (int,timing) => {
     Animated.timing(
       this.state.xValue,

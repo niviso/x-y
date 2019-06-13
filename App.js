@@ -3,14 +3,25 @@ import {Platform, StyleSheet, Text, View,SafeAreaView} from 'react-native';
 import Game from './Game';
 import Start from './Start';
 import End from './End';
+import { Audio } from 'expo-av';
 
 
 export default class App extends Component<Props> {
   constructor(props){
     super(props);
     this.state = {
-      screen : 'start' //start,game,finish
+      screen : 'start', //start,game,finish
+      playing: false
     }
+  }
+
+  playSound = async () => {
+    if(!this.state.playing){
+    await Audio.setIsEnabledAsync(true);
+    const sound = new Audio.Sound();
+    await sound.loadAsync(require('./assets/music/05.mp3'));
+    await sound.playAsync();
+  }
   }
   setScreen = (str) => {
     this.setState({
@@ -28,11 +39,10 @@ export default class App extends Component<Props> {
       });
   }
   componentDidMount(){
-    setTimeout(x=>{
+      this.playSound();
       this.setState({
-        message: 'big bop'
-        })
-      },5000);
+        playing: true
+      });
   }
   render() {
     return (
