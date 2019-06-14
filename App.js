@@ -3,7 +3,7 @@ import {Platform, StyleSheet, Text, View,SafeAreaView} from 'react-native';
 import Game from './Game';
 import Start from './Start';
 import End from './End';
-import { Audio } from 'expo-av';
+import AudioHelper from './AudioHelper';
 
 
 export default class App extends Component<Props> {
@@ -13,36 +13,22 @@ export default class App extends Component<Props> {
       screen : 'start', //start,game,finish
       playing: false
     }
-    this.sound = new Audio.Sound();
-    this.STARTMUSIC = require('./assets/music/04.mp3');
-    this.GAMEMUSIC = require('./assets/music/04.mp3');
+    this.STARTMUSIC = require('./assets/music/jazz.mp3');
+    this.GAMEMUSIC = require('./assets/music/06.mp3');
+    this.ENDING = require('./assets/music/ending.wav');
+
   }
 
-  startSound = async (file) => {
-    if(!this.state.playing){
-    await Audio.setIsEnabledAsync(true);
-    await this.sound.loadAsync(file);
-    this.sound.setIsLoopingAsync(true);
-    this.playSound();
-  }
-  }
 
-  playSound = async () => {
-await this.sound.playAsync();
-}
-  pauseSound = async () => {
-    await this.sound.pauseAsync();
-  }
-  stopSound = async () => {
-    await this.sound.stopAsync();
-  }
   setScreen = (str) => {
     this.setState({
       screen: str
       });
   }
   startGame = () => {
-
+    AudioHelper.stopAll().then(x=>{
+    AudioHelper.init(this.GAMEMUSIC);
+    });
     this.setState({
       screen: 'game'
       });
@@ -50,12 +36,16 @@ await this.sound.playAsync();
 
   }
   stopGame = () => {
+    AudioHelper.stopAll().then(x=>{
+    AudioHelper.init(this.ENDING);
+
+    });
     this.setState({
-      screen: 'start'
+      screen: 'end'
       });
   }
   componentDidMount(){
-      this.startSound(this.STARTMUSIC);
+    AudioHelper.init(this.STARTMUSIC);
       this.setState({
         playing: true
       });
@@ -65,7 +55,7 @@ await this.sound.playAsync();
       <SafeAreaView style={styles.container}>
         { this.state.screen == 'start' && ( <Start startGame={this.startGame}/> ) }
         { this.state.screen == 'game' && ( <Game stopGame={this.stopGame}/> ) }
-        { this.state.screen == 'end' && ( <End setScreen={this.startGame}/> ) }
+        { this.state.screen == 'end' && ( <End startGame={this.startGame}/> ) }
 
       </SafeAreaView>
     );

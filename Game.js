@@ -3,25 +3,31 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, TouchableOpacity, Animated, TouchableWithoutFeedback} from 'react-native';
 import GameState from './GameState';
 import Answer from './Answer';
-
+import AudioHelper from './AudioHelper';
+import AsyncStorageHelper from './asyncStorageHelper'
 export default class Game extends Component{
 
   constructor(props){
     super(props);
     this.state = {
       time: GameState.START_TIME,
+      points: 0,
       combo: {
         index: 0,
-        time: 0
+        time: 1000
       },
       data: {
         question: '92 + 2?',
         answers: [2,3,4,94],
         rightAnswer: 94
-      }
+      },
     }
 
     this.timer = null;
+    this.rightAnswerSound = require('./assets/music/right.mp3');
+    this.wrongAnswerSound = require('./assets/music/wrong.wav');
+
+
   }
 
   shuffle = (a) => {
@@ -36,6 +42,9 @@ export default class Game extends Component{
       this.setState(prevState => ({
         time: prevState.time + GameState.POINTS_ON_RIGHT
       }));
+      if(!this.props.autoplay){
+        AudioHelper.init(this.rightAnswerSound);
+      }
       setTimeout(x=>{
         this.generateQuestion();
       },250);
@@ -43,6 +52,10 @@ export default class Game extends Component{
       this.setState(prevState => ({
         time: prevState.time - GameState.POINTS_ON_WRONG
       }));
+      if(!this.props.autoplay){
+        AudioHelper.init(this.wrongAnswerSound);
+      }
+
     }
   }
   generateQuestion = () => {
@@ -103,6 +116,8 @@ export default class Game extends Component{
 
   render(){
     const NORMALIZED_TIME = (this.state.time/GameState.START_TIME) * 100;
+    const NORMALIZED_COMBO_TIME = (this.state.combo.time/GameState.COMBO_TIMER_START) * 100;
+
     const TIMER_COLOR = this.getTimerColor(NORMALIZED_TIME);
     const styles = StyleSheet.create({
       container: {
@@ -118,8 +133,20 @@ export default class Game extends Component{
         width: NORMALIZED_TIME.toString() + "%",
         color: '#333333',
       },
+      comboBar: {
+        backgroundColor: 'green',
+        height: '5%',
+        width: NORMALIZED_COMBO_TIME.toString() + "%",
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      whiteTxt: {
+        color: 'white',
+        fontSize: 20
+      },
       question: {
-        height: '45%',
+        height: '40%',
         width: '100%',
         flex: 1,
         justifyContent: 'center',
@@ -143,6 +170,8 @@ export default class Game extends Component{
     return (
       <View style={styles.container}>
         <View style={styles.timerBar}></View>
+        <View style={styles.comboBar}><Text style={styles.whiteTxt}>x{this.state.combo.index}</Text></View>
+
         <View style={styles.question}>
         <Text style={styles.questionText}>{this.state.data.question}</Text>
         </View>

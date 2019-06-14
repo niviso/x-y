@@ -1,6 +1,6 @@
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View,Animated,Easing,TouchableWithoutFeedback} from 'react-native';
+import {Platform, StyleSheet, Text, View,Animated,Easing,TouchableWithoutFeedback,Image} from 'react-native';
 import Game from './Game';
 import GameState from './GameState';
 

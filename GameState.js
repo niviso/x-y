@@ -1,6 +1,7 @@
 const GameState = {
-    START_TIME: 10000,
+    START_TIME: 30000,
     FPS: 60,
+    COMBO_TIMER_START: 1000,
     POINTS_ON_RIGHT: 1000,
     POINTS_ON_WRONG: 1000,
     SECOND: 1000,
