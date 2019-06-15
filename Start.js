@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View,Animated,Easing,TouchableWithoutFeedback,Image} from 'react-native';
 import Game from './Game';
 import GameState from './GameState';
+import AudioHelper from './AudioHelper';
 
 export default class Start extends Component{
 
@@ -12,9 +13,20 @@ export default class Start extends Component{
       pressed: false,
       autoplay: true,
       xValue: new Animated.Value(0.9),
+      sound: true
     }
   }
-
+  toggleSound = () => {
+    console.log(AudioHelper.list);
+      this.setState(prevState => ({
+      sound: !prevState.sound
+    }));
+    if(!this.state.sound){
+      AudioHelper.unMuteAll();
+    } else {
+      AudioHelper.muteAll();
+    }
+  }
   animate = (int,timing) => {
     Animated.timing(
       this.state.xValue,
@@ -82,6 +94,14 @@ export default class Start extends Component{
         justifyContent: 'center',
         alignItems: 'center',
 
+      },
+      menu: {
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        padding: 10,
+        fontSize: 20
+
       }
     });
     return (
@@ -93,6 +113,10 @@ export default class Start extends Component{
           <Text style={styles.start}>Press anywhere to start game</Text>
         </Animated.View>
         </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={this.toggleSound}>
+        <Text style={styles.menu}>Sound: {this.state.sound ? 'ON' : 'OFF'}</Text>
+        </TouchableWithoutFeedback>
+
       </View>
     );
   }

@@ -3,6 +3,7 @@ import { Audio } from 'expo-av';
 
 const AudioHelper = {
     list: [],
+    muted: false,
     isInList: function(file){
       return this.list.findIndex(file) === 1;
     },
@@ -14,11 +15,33 @@ const AudioHelper = {
       await Audio.setIsEnabledAsync(true);
       await this.list[file].audio.loadAsync(this.list[file].file);
       await this.list[file].audio.playAsync();
+      if(this.muted){
+        this.mute(file);
+      }
+
     } catch(e){
         console.log("No bueno",file.toString());
     }
 
     //  this.list[file].audio.setIsLoopingAsync(true);
+    },
+    muteAll: async function(){
+      this.muted = true;
+      this.list.map(index=>{
+        this.mute(index.file);
+      });
+    },
+    mute: async function(file){
+         this.list[file].audio.setIsMutedAsync(true);
+    },
+    unMute: async function(file){
+         this.list[file].audio.setIsMutedAsync(false);
+    },
+    unMuteAll: function(){
+      this.muted = false;
+      this.list.map(index=>{
+        this.unMute(index.file);
+      });
     },
     findIndex: function(file){
       return this.list.findIndex(file);
