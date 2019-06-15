@@ -4,7 +4,7 @@ import {Platform, StyleSheet, Text, View,Animated,Easing,TouchableWithoutFeedbac
 import Game from './Game';
 import GameState from './GameState';
 import AudioHelper from './AudioHelper';
-
+import AudioButton from './AudioButton';
 export default class Start extends Component{
 
   constructor(props){
@@ -113,9 +113,10 @@ export default class Start extends Component{
           <Text style={styles.start}>Press anywhere to start game</Text>
         </Animated.View>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={this.toggleSound}>
-        <Text style={styles.menu}>Sound: {this.state.sound ? 'ON' : 'OFF'}</Text>
-        </TouchableWithoutFeedback>
+        <View style={styles.menu}>
+        <AudioButton/>
+        </View>
+
 
       </View>
     );

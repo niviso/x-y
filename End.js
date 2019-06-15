@@ -1,8 +1,9 @@
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, TouchableWithoutFeedback} from 'react-native';
+import {Platform, StyleSheet, Text, View,Animated,Easing,TouchableWithoutFeedback,Image} from 'react-native';
 import AsyncStorageHelper from './asyncStorageHelper'
 import Game from './Game';
+import AudioButton from './AudioButton';
 
 export default class End extends Component{
 
@@ -84,6 +85,14 @@ export default class End extends Component{
         justifyContent: 'center',
         alignItems: 'center',
 
+      },
+      menu: {
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        padding: 10,
+        fontSize: 20
+
       }
     });
     return (
@@ -95,6 +104,9 @@ export default class End extends Component{
           <Text style={styles.start}>Press anywhere to play again</Text>
         </View>
         </TouchableWithoutFeedback>
+        <View style={styles.menu}>
+        <AudioButton/>
+        </View>
       </View>
     );
 
