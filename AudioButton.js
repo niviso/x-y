@@ -27,32 +27,30 @@ export default class AudioButton extends Component{
   render(){
     const styles = StyleSheet.create({
       container: {
-        textAlign: 'center',
         width: '100%',
         height: '100%',
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'relative',
-        width: '100%',
-        height:' 100%'
+      },
+      text: {
+        fontSize: 20,
+        textAlign: 'center',
+        color: 'white',
+        padding: 10,
+        width: 150
       },
       menu: {
         position: 'absolute',
         right: 0,
         top: 0,
-        padding: 10,
-        fontSize: 20
+        padding: 10
 
       }
     });
     return (
-      <View style={styles.container}>
         <TouchableWithoutFeedback onPress={this.toggleSound}>
-        <Text style={styles.menu}>Sound: {this.state.sound ? 'ON' : 'OFF'}</Text>
+        <View style={styles.menu}>
+        <Text style={{...styles.text,backgroundColor: this.state.sound ? 'green' : 'red'}}>SOUND {this.state.sound ? 'ON' : 'OFF'}</Text>
+        </View>
       </TouchableWithoutFeedback>
-
-      </View>
     );
   }
 

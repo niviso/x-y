@@ -14,7 +14,8 @@ export default class Game extends Component{
       points: 0,
       combo: {
         index: 0,
-        time: 1000
+        time: 0,
+        depleated: false
       },
       data: {
         question: '92 + 2?',
@@ -40,7 +41,12 @@ export default class Game extends Component{
   _pressAnswer = (i) => {
     if(parseInt(this.state.data.rightAnswer) === parseInt(this.state.data.answers[i])){
       this.setState(prevState => ({
-        time: prevState.time + GameState.POINTS_ON_RIGHT
+        time: prevState.time + GameState.POINTS_ON_RIGHT,
+        combo: {
+          index: prevState.combo.index++,
+          time: GameState.COMBO_TIMER_START,
+          depleated: false
+        }
       }));
       if(!this.props.autoplay){
         AudioHelper.init(this.rightAnswerSound);
@@ -50,8 +56,20 @@ export default class Game extends Component{
       },250);
     } else {
       this.setState(prevState => ({
-        time: prevState.time - GameState.POINTS_ON_WRONG
+        time: prevState.time - GameState.POINTS_ON_WRONG,
+        combo:{
+          depleated: true
+        }
       }));
+      setTimeout(x=>{
+      this.setState({
+        combo: {
+          index: 0,
+          time: 0,
+          depleated: false
+        }
+      });
+      },1000);
       if(!this.props.autoplay){
         AudioHelper.init(this.wrongAnswerSound);
       }
@@ -95,7 +113,11 @@ export default class Game extends Component{
     this.generateQuestion();
     this.timer = setInterval( x => {
       this.setState(prevState => ({
-        time: prevState.time - (GameState.SECOND/GameState.FPS)
+        time: prevState.time - (GameState.SECOND/GameState.FPS),
+        combo: {
+          index: prevState.combo.time > 0 ? prevState.combo.index : 0,
+          time: prevState.combo.time > 0 ? prevState.combo.time - (GameState.SECOND/GameState.FPS) : 0
+        }
       }));
       if(this.state.time <= 0){
         if(this.props.autoplay){
@@ -134,9 +156,9 @@ export default class Game extends Component{
         color: '#333333',
       },
       comboBar: {
-        backgroundColor: 'green',
         height: '5%',
         width: NORMALIZED_COMBO_TIME.toString() + "%",
+        backgroundColor: this.state.combo.depleated ? 'red' : 'green',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
