@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View,Animated,Easing,TouchableWithoutFeedback,Image} from 'react-native';
 import AudioHelper from './AudioHelper';
+import Color from './references/Color';
 
 export default class AudioButton extends Component{
 
@@ -33,7 +34,7 @@ export default class AudioButton extends Component{
       text: {
         fontSize: 20,
         textAlign: 'center',
-        color: 'white',
+        color: Color.white,
         padding: 10,
         width: 150
       },
@@ -48,7 +49,7 @@ export default class AudioButton extends Component{
     return (
         <TouchableWithoutFeedback onPress={this.toggleSound}>
         <View style={styles.menu}>
-        <Text style={{...styles.text,backgroundColor: this.state.sound ? 'green' : 'red'}}>SOUND {this.state.sound ? 'ON' : 'OFF'}</Text>
+        <Text style={{...styles.text,backgroundColor: this.state.sound ? Color.green : Color.red}}>SOUND {this.state.sound ? 'ON' : 'OFF'}</Text>
         </View>
       </TouchableWithoutFeedback>
     );

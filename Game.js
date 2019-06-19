@@ -4,7 +4,10 @@ import {Platform, StyleSheet, Text, View, TouchableOpacity, Animated, TouchableW
 import GameState from './GameState';
 import Answer from './Answer';
 import AudioHelper from './AudioHelper';
-import AsyncStorageHelper from './asyncStorageHelper'
+import AsyncStorageHelper from './asyncStorageHelper';
+import AudioList from './references/AudioList';
+import Color from './references/Color';
+
 export default class Game extends Component{
 
   constructor(props){
@@ -25,11 +28,6 @@ export default class Game extends Component{
     }
 
     this.timer = null;
-    this.rightAnswerSound = require('./assets/music/right.mp3');
-    this.wrongAnswerSound = require('./assets/music/wrong.wav');
-    this.combo_01 = require('./assets/music/combo_01.mp3');
-    this.combo_02 = require('./assets/music/combo_02.mp3');
-    this.combo_03 = require('./assets/music/combo_03.mp3');
 
 
   }
@@ -59,17 +57,17 @@ export default class Game extends Component{
         }
       }));
       if(!this.props.autoplay){
-        AudioHelper.init(this.rightAnswerSound,0.3);
         if(this.state.combo.index > 0 && this.state.combo.index < 2){
-          AudioHelper.init(this.combo_01);
+          AudioHelper.init(AudioList.combo_01);
         }
         if(this.state.combo.index > 2 && this.state.combo.index < 4){
-          AudioHelper.init(this.combo_02);
+          AudioHelper.init(AudioList.combo_02);
         }
         if(this.state.combo.index > 5 && this.state.combo.index < 7){
-          AudioHelper.init(this.combo_03);
+          AudioHelper.init(AudioList.combo_03);
         }
-        AudioHelper.init(this.rightAnswerSound);
+        
+        AudioHelper.init(AudioList.right);
 
       }
       setTimeout(x=>{
@@ -94,7 +92,7 @@ export default class Game extends Component{
       });
     },250);
       if(!this.props.autoplay){
-        AudioHelper.init(this.wrongAnswerSound);
+        AudioHelper.init(AudioList.wrong);
       }
 
     }
@@ -125,11 +123,11 @@ export default class Game extends Component{
   }
   getTimerColor = (int) => {
     if(int > 60){
-      return 'mediumseagreen';
+      return Color.mediumseagreen;
     } else if(int > 20){
-      return 'darkorange';
+      return Color.darkorange;
     } else {
-      return 'firebrick';
+      return Color.firebrick;
     }
   }
   componentDidMount(){
@@ -171,7 +169,7 @@ export default class Game extends Component{
         width: '100%',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: Color.background,
       },
       timerBar: {
         backgroundColor: TIMER_COLOR,
@@ -182,7 +180,7 @@ export default class Game extends Component{
       comboBar: {
         height: '5%',
         width: NORMALIZED_COMBO_TIME.toString() + "%",
-        backgroundColor: this.state.combo.depleated ? 'red' : 'green',
+        backgroundColor: this.state.combo.depleated ? Color.red : Color.green,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

@@ -4,6 +4,7 @@ import Game from './Game';
 import Start from './Start';
 import End from './End';
 import AudioHelper from './AudioHelper';
+import AudioList from './references/AudioList';
 
 
 export default class App extends Component<Props> {
@@ -13,9 +14,6 @@ export default class App extends Component<Props> {
       screen : 'start', //start,game,finish
       playing: false
     }
-    this.STARTMUSIC = require('./assets/music/ending.mp3');
-    this.GAMEMUSIC = require('./assets/music/06.mp3');
-    this.ENDING = require('./assets/music/ending.mp3');
 
   }
 
@@ -27,7 +25,7 @@ export default class App extends Component<Props> {
   }
   startGame = () => {
     AudioHelper.stopAll().then(x=>{
-    AudioHelper.init(this.GAMEMUSIC);
+    AudioHelper.init(AudioList.BGM_01);
     });
     this.setState({
       screen: 'game'
@@ -37,7 +35,7 @@ export default class App extends Component<Props> {
   }
   stopGame = () => {
     AudioHelper.stopAll().then(x=>{
-    AudioHelper.init(this.ENDING);
+    AudioHelper.init(AudioList.ENDING);
 
     });
     this.setState({
@@ -45,7 +43,7 @@ export default class App extends Component<Props> {
       });
   }
   componentDidMount(){
-    AudioHelper.init(this.STARTMUSIC);
+    AudioHelper.init(AudioList.ENDING);
       this.setState({
         playing: true
       });
