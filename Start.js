@@ -12,7 +12,6 @@ export default class Start extends Component{
     this.state = {
       pressed: false,
       autoplay: true,
-      xValue: new Animated.Value(0.9),
       sound: true
     }
   }
@@ -27,18 +26,8 @@ export default class Start extends Component{
       AudioHelper.muteAll();
     }
   }
-  animate = (int,timing) => {
-    Animated.timing(
-      this.state.xValue,
-      {
-        toValue: int,
-        duration: timing || GameState.DEFAULT_ANIMATION_TIME,
-        easing: Easing.easeIn
-      }
-    ).start();
-  }
+
   _onPress = () => {
-    this.animate(0);
     this.setState({
       autoplay: false
     });
@@ -108,10 +97,10 @@ export default class Start extends Component{
       <View style={styles.container}>
         <Game autoplay={this.state.autoplay}/>
         <TouchableWithoutFeedback onPress={this._onPress}>
-        <Animated.View style={{...styles.absoluteWrapper,opacity: this.state.xValue}}>
+        <View style={styles.absoluteWrapper}>
           <Text style={styles.welcome}>X + Y</Text>
           <Text style={styles.start}>Press anywhere to start game</Text>
-        </Animated.View>
+        </View>
         </TouchableWithoutFeedback>
         <View style={styles.menu}>
         <AudioButton/>

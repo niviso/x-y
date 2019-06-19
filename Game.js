@@ -27,8 +27,17 @@ export default class Game extends Component{
     this.timer = null;
     this.rightAnswerSound = require('./assets/music/right.mp3');
     this.wrongAnswerSound = require('./assets/music/wrong.wav');
+    this.combo_01 = require('./assets/music/combo_01.mp3');
+    this.combo_02 = require('./assets/music/combo_02.mp3');
+    this.combo_03 = require('./assets/music/combo_03.mp3');
 
 
+  }
+
+  componentWillUnmount(){
+    if(!this.props.autoplay){
+      AsyncStorageHelper.set("current_points",this.state.points);
+    }
   }
 
   shuffle = (a) => {
@@ -41,15 +50,27 @@ export default class Game extends Component{
   _pressAnswer = (i) => {
     if(parseInt(this.state.data.rightAnswer) === parseInt(this.state.data.answers[i])){
       this.setState(prevState => ({
-        time: prevState.time + GameState.POINTS_ON_RIGHT,
+        time: prevState.time + (GameState.POINTS_ON_RIGHT * prevState.combo.index),
+        points: prevState.points + 1,
         combo: {
-          index: prevState.combo.index++,
+          index: prevState.combo.index + 1,
           time: GameState.COMBO_TIMER_START,
           depleated: false
         }
       }));
       if(!this.props.autoplay){
         AudioHelper.init(this.rightAnswerSound);
+        if(this.state.combo.index > 0 && this.state.combo.index < 2){
+          AudioHelper.init(this.combo_01);
+        }
+        if(this.state.combo.index > 2 && this.state.combo.index < 4){
+          AudioHelper.init(this.combo_02);
+        }
+        if(this.state.combo.index > 5 && this.state.combo.index < 7){
+          AudioHelper.init(this.combo_03);
+        }
+        AudioHelper.init(this.rightAnswerSound);
+
       }
       setTimeout(x=>{
         this.generateQuestion();
@@ -58,6 +79,8 @@ export default class Game extends Component{
       this.setState(prevState => ({
         time: prevState.time - GameState.POINTS_ON_WRONG,
         combo:{
+          index: prevState.combo.index,
+          time: prevState.combo.time,
           depleated: true
         }
       }));
@@ -66,10 +89,10 @@ export default class Game extends Component{
         combo: {
           index: 0,
           time: 0,
-          depleated: false
+          depleated: true
         }
       });
-      },1000);
+    },250);
       if(!this.props.autoplay){
         AudioHelper.init(this.wrongAnswerSound);
       }
@@ -116,7 +139,8 @@ export default class Game extends Component{
         time: prevState.time - (GameState.SECOND/GameState.FPS),
         combo: {
           index: prevState.combo.time > 0 ? prevState.combo.index : 0,
-          time: prevState.combo.time > 0 ? prevState.combo.time - (GameState.SECOND/GameState.FPS) : 0
+          time: prevState.combo.time > 0 ? prevState.combo.time - (GameState.SECOND/GameState.FPS) : 0,
+          depleated: prevState.combo.depleated
         }
       }));
       if(this.state.time <= 0){
