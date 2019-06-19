@@ -13,9 +13,9 @@ export default class App extends Component<Props> {
       screen : 'start', //start,game,finish
       playing: false
     }
-    this.STARTMUSIC = require('./assets/music/03.mp3');
+    this.STARTMUSIC = require('./assets/music/ending.mp3');
     this.GAMEMUSIC = require('./assets/music/06.mp3');
-    this.ENDING = require('./assets/music/01.mp3');
+    this.ENDING = require('./assets/music/ending.mp3');
 
   }
 

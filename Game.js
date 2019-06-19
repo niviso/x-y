@@ -59,7 +59,7 @@ export default class Game extends Component{
         }
       }));
       if(!this.props.autoplay){
-        AudioHelper.init(this.rightAnswerSound);
+        AudioHelper.init(this.rightAnswerSound,0.3);
         if(this.state.combo.index > 0 && this.state.combo.index < 2){
           AudioHelper.init(this.combo_01);
         }
