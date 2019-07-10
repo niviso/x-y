@@ -7,7 +7,7 @@ const AudioHelper = {
     isInList: function(file){
       return this.list.findIndex(file) === 1;
     },
-    init: async function(file,volume,looping){
+    init: async function(file,volume,looping,pitch){
       let newAudio =  new Audio.Sound();
 
       this.list[file] = {audio: newAudio, file: file};
@@ -23,6 +23,10 @@ const AudioHelper = {
       }
       if(this.muted){
         this.mute(file);
+      }
+      if(pitch){
+        this.list[file].audio.setRateAsync(pitch,true,1);
+
       }
 
     } catch(e){

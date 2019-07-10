@@ -66,8 +66,9 @@ export default class Game extends Component{
         if(this.state.combo.index > 5 && this.state.combo.index < 7){
           AudioHelper.init(AudioList.combo_03);
         }
-        
-        AudioHelper.init(AudioList.right);
+
+        AudioHelper.init(AudioList.right,1,false,( 1 + (0.05 * this.state.combo.index)));
+
 
       }
       setTimeout(x=>{
@@ -82,6 +83,7 @@ export default class Game extends Component{
           depleated: true
         }
       }));
+      if(this.state.combo.index != 0){
       setTimeout(x=>{
       this.setState({
         combo: {
@@ -91,6 +93,7 @@ export default class Game extends Component{
         }
       });
     },250);
+  }
       if(!this.props.autoplay){
         AudioHelper.init(AudioList.wrong);
       }

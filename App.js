@@ -25,7 +25,7 @@ export default class App extends Component<Props> {
   }
   startGame = () => {
     AudioHelper.stopAll().then(x=>{
-    AudioHelper.init(AudioList.BGM_01);
+    AudioHelper.init(AudioList.BGM_03);
     });
     this.setState({
       screen: 'game'
@@ -35,7 +35,7 @@ export default class App extends Component<Props> {
   }
   stopGame = () => {
     AudioHelper.stopAll().then(x=>{
-    AudioHelper.init(AudioList.ENDING);
+    AudioHelper.init(AudioList.IDLE);
 
     });
     this.setState({
@@ -43,7 +43,7 @@ export default class App extends Component<Props> {
       });
   }
   componentDidMount(){
-    AudioHelper.init(AudioList.ENDING);
+    AudioHelper.init(AudioList.IDLE);
       this.setState({
         playing: true
       });
