@@ -32,12 +32,6 @@ export default class Game extends Component{
 
   }
 
-  componentWillUnmount(){
-    if(!this.props.autoplay){
-      AsyncStorageHelper.set("current_points",this.state.points);
-    }
-  }
-
   shuffle = (a) => {
       for (let i = a.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -49,13 +43,14 @@ export default class Game extends Component{
     if(parseInt(this.state.data.rightAnswer) === parseInt(this.state.data.answers[i])){
       this.setState(prevState => ({
         time: prevState.time + (GameState.POINTS_ON_RIGHT * prevState.combo.index),
-        points: prevState.points + 1,
+        points: (prevState.points + 1),
         combo: {
           index: prevState.combo.index + 1,
           time: GameState.COMBO_TIMER_START,
           depleated: false
         }
       }));
+
       if(!this.props.autoplay){
         if(this.state.combo.index > 0 && this.state.combo.index < 2){
           AudioHelper.init(AudioList.combo_01);
@@ -133,8 +128,14 @@ export default class Game extends Component{
       return Color.firebrick;
     }
   }
+
   componentDidMount(){
     this.generateQuestion();
+
+    if(!this.props.autoplay){
+      AsyncStorageHelper.set("current_points",this.state.points.toString());
+    }
+
     this.timer = setInterval( x => {
       this.setState(prevState => ({
         time: prevState.time - (GameState.SECOND/GameState.FPS),
@@ -150,10 +151,11 @@ export default class Game extends Component{
             time: GameState.START_TIME
           });
         } else {
-          this.props.stopGame();
+          AsyncStorageHelper.set("current_points",this.state.points.toString()).then(response => {
+            this.props.stopGame();            
+          });
         }
       }
-
     },GameState.SECOND/GameState.FPS);
   }
 

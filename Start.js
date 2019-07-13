@@ -16,7 +16,6 @@ export default class Start extends Component{
     }
   }
   toggleSound = () => {
-    console.log(AudioHelper.list);
       this.setState(prevState => ({
       sound: !prevState.sound
     }));

@@ -15,7 +15,7 @@ const AsyncStorageHelper = {
     },
     set: function(key,data){
         try{
-            AsyncStorage.setItem(key, data);
+            return AsyncStorage.setItem(key, data);
         } catch(error){
             console.log(error.message);
         }
