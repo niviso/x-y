@@ -25,7 +25,7 @@ export default class App extends Component<Props> {
   }
   startGame = () => {
     AudioHelper.stopAll().then(x=>{
-    AudioHelper.init(AudioList.BGM_03);
+    AudioHelper.init(AudioList.BGM_01);
     });
     this.setState({
       screen: 'game'
